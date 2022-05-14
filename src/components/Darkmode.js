@@ -6,8 +6,6 @@ export default class Darkmode {
   }
 
   render() {
-    const $body = document.body;
-
     const $changeThemeBox = document.createElement('input');
     $changeThemeBox.type = 'checkbox';
 
@@ -15,7 +13,13 @@ export default class Darkmode {
     $changeThemeBox.classList.add('ThemeBtn');
     this.$target.appendChild($changeThemeBox);
 
-    $changeThemeBox.addEventListener('click', () => {
+    this.addThemeToggleEvent($changeThemeBox);
+  }
+
+  addThemeToggleEvent($target) {
+    const $body = document.body;
+
+    $target.addEventListener('click', () => {
       // darkmode나 whitemode가 한번이라도 적용되면 그거 반대로 (n번)
       const isDarkMode = $body.classList.contains('darkmode');
       const isWhiteMode = $body.classList.contains('whitemode');

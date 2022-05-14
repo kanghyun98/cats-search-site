@@ -1,14 +1,14 @@
 export default class KeywordsSection {
-  constructor({ $target, onClickKeyword }) {
+  constructor({ $target, handleKeywords }) {
     this.$keywordSection = document.createElement('ul');
     this.$keywordSection.className = 'KeywordSection';
     $target.appendChild(this.$keywordSection);
-    this.addEvent();
 
     this.keywordsLog = [];
-    this.handleClickKeyword = onClickKeyword;
+    this.onKeywords = handleKeywords;
 
     this.render();
+    this.addEvent(this.$keywordSection);
   }
 
   setState(newLog) {
@@ -26,12 +26,12 @@ export default class KeywordsSection {
     this.$keywordSection.innerHTML = $keywords;
   }
 
-  addEvent() {
-    this.$keywordSection.addEventListener('click', async (e) => {
+  addEvent($target) {
+    $target.addEventListener('click', async (e) => {
       const $keyword = e.target.closest('.keyword');
 
       if ($keyword) {
-        await this.handleClickKeyword(e.target.innerText);
+        await this.onKeywords(e.target.innerText);
       }
     });
   }

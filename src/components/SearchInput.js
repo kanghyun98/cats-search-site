@@ -1,7 +1,7 @@
 export default class SearchInput {
-  constructor({ $target, onSearch, onRandom }) {
-    this.handleSearch = onSearch;
-    this.handleRandom = onRandom;
+  constructor({ $target, handleSearch, handleRandom }) {
+    this.onSearch = handleSearch;
+    this.onRandom = handleRandom;
 
     this.$searchHeader = document.createElement('div');
     this.$searchHeader.classList.add('SearchHeader');
@@ -25,27 +25,33 @@ export default class SearchInput {
     this.$searchHeader.appendChild($randomBtn);
 
     // 이벤트 처리
-    // 검색
-    $searchInput.addEventListener('keyup', async (e) => {
+    this.addSearchEvent($searchInput);
+    this.addRandomEvent($randomBtn);
+  }
+
+  // random 버튼 클릭 이벤트
+  addRandomEvent($target) {
+    $target.addEventListener('click', async () => {
+      await this.onRandom();
+    });
+  }
+
+  // 검색 이벤트
+  addSearchEvent($target) {
+    $target.addEventListener('keyup', async (e) => {
       if (e.key === 'Enter') {
         if (e.target.value) {
-          // 정상 입력
-          await this.handleSearch(e.target.value);
-        } else {
-          // 아무것도 입력 안했을 시, 랜덤 결과 나오게
-          await this.handleRandom();
+          await this.onSearch(e.target.value); // 정상 입력
+          return;
         }
+
+        await this.onRandom(); // 아무것도 입력 안했을 시, 랜덤 결과 나오게
       }
     });
 
     // input 클릭 시, 키워드 초기화
-    $searchInput.addEventListener('focus', (e) => {
-      $searchInput.value = '';
-    });
-
-    // random 버튼 클릭
-    $randomBtn.addEventListener('click', async () => {
-      await this.handleRandom();
+    $target.addEventListener('focus', (e) => {
+      $target.value = '';
     });
   }
 }

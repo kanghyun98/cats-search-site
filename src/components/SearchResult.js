@@ -5,14 +5,14 @@ export default class SearchResult {
   data = [];
   onClick = null;
 
-  constructor({ $target, onClick }) {
+  constructor({ $target, handleClick }) {
     this.$searchResult = document.createElement('section');
     this.$searchResult.className = 'SearchResult';
     $target.appendChild(this.$searchResult);
-    this.addEvent();
+    this.addEvent(this.$searchResult);
 
     this.data = [];
-    this.onClick = onClick;
+    this.onClick = handleClick;
   }
 
   setState(nextData) {
@@ -37,8 +37,8 @@ export default class SearchResult {
     this.$searchResult.appendChild($noResult);
   }
 
-  addEvent() {
-    this.$searchResult.addEventListener('click', async (e) => {
+  addEvent($target) {
+    $target.addEventListener('click', async (e) => {
       const $item = e.target.closest('.item');
 
       if ($item) {
