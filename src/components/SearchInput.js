@@ -1,11 +1,9 @@
-const TEMPLATE = '<input type="text">';
-
 export default class SearchInput {
   constructor({ $target, onSearch, onRandom }) {
     this.handleSearch = onSearch;
     this.handleRandom = onRandom;
 
-    this.$searchHeader = document.createElement('header');
+    this.$searchHeader = document.createElement('div');
     this.$searchHeader.classList.add('SearchHeader');
     $target.appendChild(this.$searchHeader);
 
@@ -13,18 +11,17 @@ export default class SearchInput {
   }
 
   render() {
+    // 검색창
     const $searchInput = document.createElement('input');
-    $searchInput.placeholder = '고양이를 검색해보세요.|';
+    $searchInput.placeholder = '고양이를 검색해보세요.';
     $searchInput.className = 'SearchInput';
     $searchInput.autofocus = true; // 페이지 진입 시, 자동 포커스
+    this.$searchHeader.appendChild($searchInput);
 
+    // 랜덤 버튼
     const $randomBtn = document.createElement('button');
     $randomBtn.classList.add('RandomBtn');
-    const $btnImg = document.createElement('img');
-    $btnImg.src = './favicon.ico';
-    $randomBtn.appendChild($btnImg);
-
-    this.$searchHeader.appendChild($searchInput);
+    $randomBtn.innerText = '랜덤';
     this.$searchHeader.appendChild($randomBtn);
 
     // 이벤트 처리

@@ -3,14 +3,11 @@ export default class ImageInfo {
   data = null;
 
   constructor({ $target, data }) {
-    const $imageInfo = document.createElement('div');
-    $imageInfo.className = 'ImageInfo';
-    this.$imageInfo = $imageInfo;
-    $target.appendChild($imageInfo);
+    this.$imageInfo = document.createElement('div');
+    this.$imageInfo.classList.add('ImageInfo', 'hidden');
+    $target.appendChild(this.$imageInfo);
 
     this.data = data;
-
-    this.render();
   }
 
   setState(nextData) {
@@ -23,10 +20,12 @@ export default class ImageInfo {
       visible: false,
       image: null,
     });
+
+    this.$imageInfo.innerHTML = '';
   }
 
   render() {
-    if (this.data.visible) {
+    if (this.data.visible && this.data.image) {
       const $overlay = document.createElement('div');
       $overlay.classList.add('overlay');
       this.$imageInfo.appendChild($overlay);
@@ -65,7 +64,8 @@ export default class ImageInfo {
       $contentWrapper.appendChild($description);
       this.$imageInfo.appendChild($contentWrapper);
 
-      this.$imageInfo.style.display = 'block';
+      this.$imageInfo.classList.remove('hidden');
+      this.$imageInfo.classList.remove('modal-hidden');
 
       // 모달 닫는 이벤트
       $overlay.addEventListener('click', () => {
@@ -82,7 +82,8 @@ export default class ImageInfo {
         }
       });
     } else {
-      this.$imageInfo.style.display = 'none';
+      this.$imageInfo.classList.add('modal-hidden');
+      setTimeout(() => this.$imageInfo.classList.add('hidden'), 1000);
     }
   }
 }

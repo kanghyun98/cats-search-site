@@ -1,3 +1,5 @@
+import Card from './Card.js';
+
 export default class SearchResult {
   $searchResult = null;
   data = [];
@@ -11,8 +13,6 @@ export default class SearchResult {
 
     this.data = [];
     this.onClick = onClick;
-
-    this.render();
   }
 
   setState(nextData) {
@@ -21,21 +21,20 @@ export default class SearchResult {
   }
 
   render() {
-    let $result = `<div class="NoResult">결과가 없습니다.</div>`;
+    this.$searchResult.innerHTML = '';
 
     if (this.data?.length) {
-      $result = this.data
-        .map(
-          (cat) => `
-          <div class="item" id=${cat.id}>
-            <img src=${cat.url} alt=${cat.name} title=${cat.name} />
-          </div>
-        `
-        )
-        .join('');
+      const $frag = document.createDocumentFragment();
+      this.data.forEach((catInfo) => new Card({ $frag, catInfo }));
+
+      this.$searchResult.appendChild($frag);
+      return;
     }
 
-    this.$searchResult.innerHTML = $result;
+    // 검색 결과 없을 경우
+    const $noResult = document.createElement('div');
+    $noResult.innerText = '결과가 없습니다.';
+    this.$searchResult.appendChild($noResult);
   }
 
   addEvent() {
